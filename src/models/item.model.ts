@@ -5,6 +5,7 @@ interface ItemAttributes {
   name: string;
   description: string;
   price: number;
+  userId: number
   image?: string;
 }
 
@@ -32,5 +33,10 @@ export const ItemModel = (
     },
     image: {
       type: DataTypes.STRING
+    },
+    userId: {
+      type: DataTypes.INTEGER,
+      allowNull: false
     }
   });
+

@@ -10,11 +10,13 @@ export const addItem = async (req: Request, res: Response) => {
       name,
       description,
       price: Number(price),
-      image: req.file?.filename
+      image: req.file?.filename,
+      userId: (req as any)?.user.id
     });
 
     res.status(201).json(newItem);
   } catch (error) {
+    console.log(error)
     res.status(500).json({ message: "Failed to add item", error });
   }
 };

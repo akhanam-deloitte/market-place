@@ -12,12 +12,12 @@ const sequelize = new Sequelize(
   {
     host: dbConfig.host,
     dialect: 'postgres',
-    port: dbConfig.port || 5432, // optional if port is custom
+    port: dbConfig.port || 5432,
     logging: false,
     dialectOptions: {
       ssl: {
         require: true,
-        rejectUnauthorized: false // set to false for self-signed certs
+        rejectUnauthorized: false
       }
     }
   }
@@ -27,6 +27,17 @@ const sequelize = new Sequelize(
 const Item = ItemModel(sequelize);
 const User = UserModel(sequelize);
 const Transaction = TransactionModel(sequelize);
+
+//association
+User.hasMany(Item, {
+  foreignKey: 'userId',
+  as: 'items'
+});
+
+Item.belongsTo(User, {
+  foreignKey: 'userId',
+  as: 'user'
+});
 
 // Sync DB
 sequelize.sync({ alter: true });
