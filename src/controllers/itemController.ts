@@ -11,7 +11,7 @@ export const addItem = async (req: Request, res: Response) => {
       description,
       price: Number(price),
       image: req.file?.filename,
-      userId: (req as any)?.user.id
+      userId: (req as any)?.user?.id
     });
 
     res.status(201).json(newItem);

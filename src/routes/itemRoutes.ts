@@ -1,6 +1,7 @@
 import express from 'express';
 import { addItem, getItems } from '../controllers/itemController';
 import multer from 'multer';
+import { verifyToken } from '../middleware/authMiddleware';
 
 const router = express.Router();
 
@@ -14,7 +15,7 @@ const storage = multer.diskStorage({
 const upload = multer({ storage });
 
 // Routes
-router.post('/', upload.single('image'), addItem);
+router.post('/', verifyToken, upload.single('image'), addItem);
 router.get('/', getItems);
 
 export default router;
