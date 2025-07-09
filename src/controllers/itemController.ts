@@ -57,3 +57,51 @@ export const getItems = async (req: Request, res: Response): Promise<void> => {
     res.status(500).json({ message: 'Failed to filter items', error: err });
   }
 };
+
+export const updateItem = async (req: Request, res: Response): Promise<void> => {
+  const { id } = req.params;
+  const { name, description, price } = req.body;
+
+  try {
+    const item = await Item.findByPk(id);
+
+    if (!item) res.status(404).json({ message: 'Item not found' });
+
+    if ((item as any)?.userId !== req.user?.id) {
+      res.status(403).json({ message: 'Unauthorized' });
+    }
+
+    const updatedFields: any = { name, description, price };
+    if (req.file) {
+      updatedFields.image = req.file.filename;
+    }
+
+    await item?.update(updatedFields);
+
+    res.status(200).json(item);
+  } catch (err) {
+    res.status(500).json({ message: 'Error updating item', error: err });
+  }
+};
+
+// controllers/itemController.ts
+export const deleteItem = async (req: Request, res: Response) : Promise<void> =>  {
+  const { id } = req.params;
+
+  try {
+    const item = await Item.findByPk(id);
+
+    if (!item) res.status(404).json({ message: 'Item not found' });
+
+    if ((item as any)?.userId !== req.user?.id) {
+      res.status(403).json({ message: 'Unauthorized' });
+    }
+
+    await item?.destroy();
+
+    res.status(200).json({ message: 'Item deleted successfully' });
+  } catch (err) {
+    res.status(500).json({ message: 'Error deleting item', error: err });
+  }
+};
+

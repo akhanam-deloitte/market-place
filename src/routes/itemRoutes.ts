@@ -1,5 +1,5 @@
 import express from 'express';
-import { addItem, getItems } from '../controllers/itemController';
+import { addItem, getItems,updateItem,deleteItem } from '../controllers/itemController';
 import multer from 'multer';
 import { verifyToken } from '../middleware/authMiddleware';
 
@@ -17,5 +17,8 @@ const upload = multer({ storage });
 // Routes
 router.post('/', verifyToken, upload.single('image'), addItem);
 router.get('/', getItems);
+router.put('/:id', verifyToken, upload.single('image'), updateItem);
+router.delete('/:id', verifyToken, deleteItem);
+
 
 export default router;
