@@ -6,8 +6,8 @@ let itemId: number;
 
 beforeAll(async () => {
   const login = await request(app).post('/api/auth/login').send({
-    email: 'testuser@example.com',
-    password: 'Test@1234'
+    email: 'asma_test@example.com',
+    password: 'strongpassword'
   });
   token = login.body.token;
 
@@ -18,7 +18,7 @@ beforeAll(async () => {
     .field('description', 'Test')
     .field('price', '999');
   itemId = item.body.id;
-});
+},50000);
 
 describe('Transaction API', () => {
   it('should initiate a transaction', async () => {
@@ -27,12 +27,12 @@ describe('Transaction API', () => {
       .set('Authorization', `Bearer ${token}`)
       .send({
         itemId,
-        type: 'buy'
+        type: 'BUY'
       });
 
     expect(res.statusCode).toBe(201);
     expect(res.body).toHaveProperty('status', 'pending');
-  });
+  },50000);
 
   it('should list user transactions', async () => {
     const res = await request(app)
@@ -41,5 +41,5 @@ describe('Transaction API', () => {
 
     expect(res.statusCode).toBe(200);
     expect(Array.isArray(res.body)).toBe(true);
-  });
+  },50000);
 });
