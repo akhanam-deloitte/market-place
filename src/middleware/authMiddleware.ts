@@ -20,7 +20,7 @@ export const verifyToken: RequestHandler = (req, res, next) => {
 
   if (!authHeader) {
     res.status(401).json({ message: 'No token provided' });
-    return; // ⬅️ Important: return void, not Response
+    return;
   }
 
   const token = authHeader.split(' ')[1];

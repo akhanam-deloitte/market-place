@@ -28,11 +28,14 @@ export const getItems = async (req: Request, res: Response): Promise<void> => {
       sortBy = 'createdAt',
       order = 'desc',
       minPrice,
-      maxPrice
+      maxPrice,
+      userId
     } = req.query;
 
-    // Build where clause
     const where: any = {};
+    if(userId) {
+      where.userId = userId;
+    }
 
     if (search) {
       where[Op.or] = [

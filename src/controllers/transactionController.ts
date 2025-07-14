@@ -3,6 +3,7 @@ import { Transaction, Item } from '../models';
 import { Op } from 'sequelize';
 
 export const createTransaction = async (req: Request, res: Response): Promise<void> => {
+  console.log("createTransaction")
   try {
     const { itemId, sellerId, type } = req.body;
     const user = (req as any).user;
@@ -17,13 +18,11 @@ export const createTransaction = async (req: Request, res: Response): Promise<vo
       return;
     }
 
-    // Prevent buyer = seller
     if (user.id === sellerId) {
       res.status(400).json({ message: 'Cannot buy/trade your own item' });
       return;
     }
 
-    // Optional: check if item exists
     const item = await Item.findByPk(itemId);
     if (!item) {
       res.status(404).json({ message: 'Item not found' });
@@ -34,7 +33,7 @@ export const createTransaction = async (req: Request, res: Response): Promise<vo
       buyerId: user.id,
       sellerId,
       itemId,
-      type, // must be 'BUY' or 'TRADE'
+      type,
       status: 'PENDING'
     });
 
@@ -85,7 +84,7 @@ export const updateTransactionStatus = async (req: Request, res: Response): Prom
       return;
     }
 
-    transaction.status = status; // must be one of "PENDING", "COMPLETED", "CANCELLED"
+    transaction.status = status;
     await transaction.save();
 
     res.status(200).json(transaction);
